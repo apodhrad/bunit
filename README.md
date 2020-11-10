@@ -1,2 +1,2 @@
-# bunit
+# BUnit
 Testing framework for Bash
