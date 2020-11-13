@@ -19,7 +19,7 @@ print_result() {
   if (( $SCENARIO_FAILURES == 0 )); then
     echo "[RESULT] Scenario tests passed"
   else  
-    echo "[RESULT] There were test $SCENARIO_FAILURES scenario failures"
+    echo "[RESULT] There were $SCENARIO_FAILURES scenario failures"
   fi
   echo ""
   after_test
@@ -38,6 +38,7 @@ fail() {
   echo "  [FAILURE] $1"
   ((FAILURES++))
   ((SCENARIO_FAILURES++))
+  return 0
 }
 
 assert() {
@@ -65,11 +66,28 @@ assertEnv() {
   fi
 }
 
+assert_equals_in_var() {
+  var="$1"
+  expected="$2"
+  actual=$(eval $(echo "echo \"\$$var\""))
+  if [ ! "$actual" == "$expected" ]; then
+    fail "Variable '$var' expected to be '$expected' but was '$actual'"
+  fi
+}
+
 assertEquals() {
   actual="$1"
   expected="$2"
   if [ ! "$actual" == "$expected" ]; then
-    fail "'Expected '$expected' but was '$actual'"
+    fail "Expected '$expected' but was '$actual'"
+  fi
+}
+
+assert_equals(){
+  expected="$1"
+  actual="$2"
+  if [ ! "$actual" == "$expected" ]; then
+    fail "Expected '$expected' but was '$actual'"
   fi
 }
 
@@ -81,7 +99,7 @@ assertBinary() {
   fi
 }
 
-assertMD5() {
+assert_md5() {
   local file="$1"
   local expected="$2"
   local actual=$(md5sum $file | awk '{ print $1 }')
@@ -90,12 +108,12 @@ assertMD5() {
   fi
 }
 
-assertMap() {
+assert_equals_in_map() {
   map="$1"
   key="$2"
-  eval $(echo "actual=\${$map[\$key]}")
   expected="$3"
+  eval $(echo "actual=\${$map[\$key]}")
   if [ ! "$actual" == "$expected" ]; then
-    fail "'$key' expected to be '$expected' but was '$actual'"
+    fail "$map[$key] expected to be '$expected' but was '$actual'"
   fi
 }
