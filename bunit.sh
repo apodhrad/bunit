@@ -10,6 +10,9 @@ after_test() {
 }
 
 scenario() {
+  [[ -z "$CURRENT_SCENARIO" ]] && echo "<testsuite>" > "test-results.xml"
+  CURRENT_SCENARIO="$1"
+  echo "  <testcase \"classname\"=\"mytest.sh\" name\"$1\"><failure/></testcase>" >> "test-results.xml"
   echo "[SCENARIO] $1"
   SCENARIO_FAILURES=0
   before_test
@@ -32,6 +35,10 @@ print_final_result() {
     echo "[FINAL_RESULT] There were $FAILURES test failures"
   fi
   echo ""
+}
+
+generate_test_results() {
+  echo "</testsuite>" >> "test-results.xml"
 }
 
 fail() {

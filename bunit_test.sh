@@ -80,3 +80,4 @@ assert_equals "  [FAILURE] TEST_MAP[key1] expected to be 'value1' but was 'value
 print_result
 
 print_final_result
+generate_test_results
