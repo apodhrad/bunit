@@ -21,7 +21,7 @@ scenario() {
 print_result() {
   if (( $SCENARIO_FAILURES == 0 )); then
     echo "[RESULT] Scenario tests passed"
-    
+    update_test_case
   else  
     echo "[RESULT] There were $SCENARIO_FAILURES scenario failures"
   fi
@@ -31,7 +31,6 @@ print_result() {
 
 print_final_result() {
   if (( $FAILURES == 0 )); then
-    update_test_case
     echo "[FINAL_RESULT] All tests passed"
   else  
     echo "[FINAL_RESULT] There were $FAILURES test failures"
