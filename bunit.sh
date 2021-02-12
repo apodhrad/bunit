@@ -44,11 +44,11 @@ init_test_results() {
 }
 
 add_test_case() {
-  echo "  <testcase \"classname\"=\"mytest.sh\" name\"$CURRENT_SCENARIO\"><failure/></testcase>" >> "test-results.xml"
+  echo "  <testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure/></testcase>" >> "test-results.xml"
 }
 
 update_test_case() {
-  sed -i 's/<testcase "classname"="mytest.sh" name"$CURRENT_SCENARIO"><failure\/><\/testcase>/<testcase "classname"="mytest.sh" name"$CURRENT_SCENARIO"><\/testcase>/g' "test-results.xml"
+  sed -i "s/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure\/><\/testcase>/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><\/testcase>/g" "test-results.xml"
 }
 
 generate_test_results() {
