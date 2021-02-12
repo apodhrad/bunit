@@ -10,9 +10,9 @@ after_test() {
 }
 
 scenario() {
-  [[ -z "$CURRENT_SCENARIO" ]] && echo "<testsuite>" > "test-results.xml"
+  init_test_results
   CURRENT_SCENARIO="$1"
-  echo "  <testcase \"classname\"=\"mytest.sh\" name\"$1\"><failure/></testcase>" >> "test-results.xml"
+  add_test_case
   echo "[SCENARIO] $1"
   SCENARIO_FAILURES=0
   before_test
@@ -21,6 +21,7 @@ scenario() {
 print_result() {
   if (( $SCENARIO_FAILURES == 0 )); then
     echo "[RESULT] Scenario tests passed"
+    
   else  
     echo "[RESULT] There were $SCENARIO_FAILURES scenario failures"
   fi
@@ -30,6 +31,7 @@ print_result() {
 
 print_final_result() {
   if (( $FAILURES == 0 )); then
+    update_test_case
     echo "[FINAL_RESULT] All tests passed"
   else  
     echo "[FINAL_RESULT] There were $FAILURES test failures"
@@ -37,7 +39,20 @@ print_final_result() {
   echo ""
 }
 
+init_test_results() {
+  [[ -z "$CURRENT_SCENARIO" ]] && echo "<testsuite>" > "test-results.xml"
+}
+
+add_test_case() {
+  echo "  <testcase \"classname\"=\"mytest.sh\" name\"$CURRENT_SCENARIO\"><failure/></testcase>" >> "test-results.xml"
+}
+
+update_test_case() {
+  sed -i 's/<testcase "classname"="mytest.sh" name"$CURRENT_SCENARIO"><failure\/><\/testcase>/<testcase "classname"="mytest.sh" name"$CURRENT_SCENARIO"><\/testcase>/g' "test-results.xml"
+}
+
 generate_test_results() {
+  init_test_results
   echo "</testsuite>" >> "test-results.xml"
 }
 
