@@ -1,5 +1,6 @@
 FAILURES=0
 SCENARIO_FAILURES=0
+BUNIT_TEST_RESULTS="test-results.xml"
 
 before_test() {
   :
@@ -39,20 +40,21 @@ print_final_result() {
 }
 
 init_test_results() {
-  [[ -z "$CURRENT_SCENARIO" ]] && echo "<testsuite>" > "test-results.xml"
+  [[ -n "$1" ]] && BUNIT_TEST_RESULTS="$1"
+  [[ -f "$BUNIT_TEST_RESULTS" ]] || echo "<testsuite>" > "$BUNIT_TEST_RESULTS"
 }
 
 add_test_case() {
-  echo "  <testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure/></testcase>" >> "test-results.xml"
+  echo "  <testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure/></testcase>" >> "$BUNIT_TEST_RESULTS"
 }
 
 update_test_case() {
-  sed -i "s/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure\/><\/testcase>/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><\/testcase>/g" "test-results.xml"
+  sed -i "s/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure\/><\/testcase>/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><\/testcase>/g" "$BUNIT_TEST_RESULTS"
 }
 
 generate_test_results() {
   init_test_results
-  echo "</testsuite>" >> "test-results.xml"
+  echo "</testsuite>" >> "$BUNIT_TEST_RESULTS"
 }
 
 fail() {
