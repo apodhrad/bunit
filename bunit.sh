@@ -1,4 +1,5 @@
 FAILURES=0
+SCENARIO=""
 SCENARIO_FAILURES=0
 
 before_test() {
@@ -10,9 +11,9 @@ after_test() {
 }
 
 scenario() {
-  init_test_results
-  CURRENT_SCENARIO="$1"
-  add_test_case
+  [[ -z "$SCENARIO" ]] && junit_init
+  SCENARIO="$1"
+  junit_add_test_case "$SCENARIO"
   echo "[SCENARIO] $1"
   SCENARIO_FAILURES=0
   before_test
@@ -21,7 +22,7 @@ scenario() {
 print_result() {
   if (( $SCENARIO_FAILURES == 0 )); then
     echo "[RESULT] Scenario tests passed"
-    update_test_case
+    junit_update_test_case "$SCENARIO"
   else  
     echo "[RESULT] There were $SCENARIO_FAILURES scenario failures"
   fi
@@ -38,15 +39,18 @@ print_final_result() {
   echo ""
 }
 
-init_test_results() {
-  [[ -z "$CURRENT_SCENARIO" ]] && echo "<testsuite>" > "test-results.xml"
+junit_init() {
+  JUNIT_TEST_RESULTS=""
+  echo "<testsuite>" > "test-results.xml"
 }
 
-add_test_case() {
+junit_add_test_case() {
+  local name="$1"
+  local classname="$2"
   echo "  <testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure/></testcase>" >> "test-results.xml"
 }
 
-update_test_case() {
+junit_update_test_case() {
   sed -i "s/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure\/><\/testcase>/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><\/testcase>/g" "test-results.xml"
 }
 
