@@ -1,6 +1,7 @@
 FAILURES=0
 SCENARIO_FAILURES=0
 BUNIT_TEST_RESULTS="test-results.xml"
+BUNIT_TEST_CLASSNAME="package.class"
 
 before_test() {
   :
@@ -41,15 +42,16 @@ print_final_result() {
 
 init_test_results() {
   [[ -n "$1" ]] && BUNIT_TEST_RESULTS="$1"
+  [[ -n "$2" ]] && BUNIT_TEST_CLASSNAME="$2"
   [[ -f "$BUNIT_TEST_RESULTS" ]] || echo "<testsuite>" > "$BUNIT_TEST_RESULTS"
 }
 
 add_test_case() {
-  echo "  <testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure/></testcase>" >> "$BUNIT_TEST_RESULTS"
+  echo "  <testcase classname=\"$BUNIT_TEST_CLASSNAME\" name=\"$CURRENT_SCENARIO\"><failure/></testcase>" >> "$BUNIT_TEST_RESULTS"
 }
 
 update_test_case() {
-  sed -i "s/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><failure\/><\/testcase>/<testcase classname=\"mytest.sh\" name=\"$CURRENT_SCENARIO\"><\/testcase>/g" "$BUNIT_TEST_RESULTS"
+  sed -i "s/<testcase classname=\"$BUNIT_TEST_CLASSNAME\" name=\"$CURRENT_SCENARIO\"><failure\/><\/testcase>/<testcase classname=\"$BUNIT_TEST_CLASSNAME\" name=\"$CURRENT_SCENARIO\"><\/testcase>/g" "$BUNIT_TEST_RESULTS"
 }
 
 generate_test_results() {
