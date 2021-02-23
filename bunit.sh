@@ -51,7 +51,13 @@ add_test_case() {
 }
 
 update_test_case() {
-  sed -i "s/<testcase classname=\"$BUNIT_TEST_CLASSNAME\" name=\"$CURRENT_SCENARIO\"><failure\/><\/testcase>/<testcase classname=\"$BUNIT_TEST_CLASSNAME\" name=\"$CURRENT_SCENARIO\"><\/testcase>/g" "$BUNIT_TEST_RESULTS"
+  local msg="$1"
+  local attributes="classname=\"$BUNIT_TEST_CLASSNAME\" name=\"$CURRENT_SCENARIO\""
+  if [[ -z "$msg" ]]; then
+    sed -i "s/<testcase $attributes><failure\/><\/testcase>/<testcase $attributes><\/testcase>/g" "$BUNIT_TEST_RESULTS"
+  else
+    sed -i "s/<testcase $attributes><failure\/><\/testcase>/<testcase $attributes><failure><![CDATA[$msg]]><\/failure><\/testcase>/g" "$BUNIT_TEST_RESULTS"
+  fi
 }
 
 generate_test_results() {
@@ -63,6 +69,7 @@ fail() {
   echo "  [FAILURE] $1"
   ((FAILURES++))
   ((SCENARIO_FAILURES++))
+  update_test_case "$1"
   return 0
 }
 
