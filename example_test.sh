@@ -10,7 +10,7 @@ print_result
 
 scenario "test saying hello with executing the script"
 result=$(./example.sh "Test2")
-assertEquals "Hello Test2" "${result}" 
+assert_equals "Hello Test2" "${result}" 
 print_result
 
 scenario "test saying hello with sourcing the script"
