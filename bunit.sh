@@ -117,3 +117,21 @@ assert_equals_in_map() {
     fail "$map[$key] expected to be '$expected' but was '$actual'"
   fi
 }
+
+execute_test() {
+  local test="$1"
+  scenario "$test"
+  eval "$test"
+  print_result
+}
+
+execute_tests() {
+  IFS=$'\n'
+  for f in $(declare -F); do
+    local function_name="${f:11}"
+    if [[ $function_name == "test_"* ]]; then
+      execute_test "$function_name"
+    fi
+  done
+  print_final_result
+}
