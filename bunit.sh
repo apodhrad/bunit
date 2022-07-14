@@ -36,8 +36,8 @@ print_final_result() {
 
 fail() {
   echo "  [FAILURE] ${1}"
-  ((FAILURES++))
-  ((SCENARIO_FAILURES++))
+  FAILURES=$((FAILURES+1))
+  SCENARIO_FAILURES=$((SCENARIO_FAILURES+1))
   return 0
 }
 
