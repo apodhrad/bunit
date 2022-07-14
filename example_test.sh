@@ -1,6 +1,6 @@
 #/bin/bash
 
-source <(curl -s "https://raw.githubusercontent.com/apodhrad/bunit/0.0.3/bunit.sh")
+source <(curl -s "https://raw.githubusercontent.com/apodhrad/bunit/0.0.4/bunit.sh")
 source "./example.sh"
 
 scenario "test saying hello with a method"

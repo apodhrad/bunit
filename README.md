@@ -1,7 +1,7 @@
 # BUnit
 Very simple testing framework for Bash. No additional installation is required, you just source the lib as follows
 
-    source <(curl -s "https://raw.githubusercontent.com/apodhrad/bunit/0.0.3/bunit.sh")
+    source <(curl -s "https://raw.githubusercontent.com/apodhrad/bunit/0.0.4/bunit.sh")
 
 # Usage
 
